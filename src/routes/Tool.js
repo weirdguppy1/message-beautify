@@ -1,12 +1,16 @@
 import { Link } from "preact-router/match";
 import { useState } from "preact/hooks";
-import { toPng } from 'html-to-image'
-import download from 'downloadjs'
+import { toPng } from "html-to-image";
+import download from "downloadjs";
+import { HexColorPicker } from "react-colorful";
 
 const Tool = () => {
   const [message, setMessage] = useState("");
   const [font, setFont] = useState("font-sans");
   const [gradient, setGradient] = useState("from-orange-100  to-fuchsia-100");
+  const [color, setColor] = useState("#000000");
+  const [secondColor, setSecondColor] = useState("#000000");
+  const [openGradient, setOpenGradient] = useState(false);
 
   const gradientString = (first, second) => `from-${first} to-${second}`;
   const handleMessageChange = (e) => {
@@ -48,7 +52,10 @@ const Tool = () => {
             className="textarea textarea-bordered resize-none w-full max-w-xs"
           />
         </div>
-        <div className="flex flex-col items-start mt-2" id="customization">
+        <div
+          className="flex flex-col items-start mt-2 space-y-4"
+          id="customization"
+        >
           <label className="label-text font-bold text-lg">Customization.</label>
           <div className="flex flex-col">
             <label className="label-text font-bold">Font</label>
@@ -61,7 +68,7 @@ const Tool = () => {
               <option value="font-mono">Mono</option>
             </select>
           </div>
-          <div
+          {/* <div
             id="gradients"
             className="mt-5 grid grid-row-3 grid-cols-4 grid-flow-row gap-4"
           >
@@ -80,12 +87,31 @@ const Tool = () => {
                 ></button>
               );
             })}
+          </div> */}
+          <HexColorPicker color={color} onChange={setColor} />
+          <div className="flex items-center space-x-2">
+            <label className="label-text">Gradient?</label>
+            <input
+              type="checkbox"
+              className="checkbox rounded-lg"
+              onChange={() => setOpenGradient((prev) => !prev)}
+              value={openGradient}
+            />
           </div>
+          {openGradient ? (
+            <HexColorPicker color={secondColor} onChange={setSecondColor} />
+          ) : null}
         </div>
       </div>
       <div
         id="image"
-        className={`mt-5 w-[50rem] h-[30rem] border-2 bg-gradient-to-tr ${gradient} ${font}`}
+        className={`mt-5 w-[50rem] h-[30rem] border-2 ${font}`}
+        style={{
+          backgroundColor: !openGradient ? color : null,
+          background: openGradient
+            ? `linear-gradient(to top right, ${color}, ${secondColor})`
+            : null,
+        }}
       >
         <div className="flex flex-col justify-center p-[4rem]">
           {message ? (
@@ -95,7 +121,7 @@ const Tool = () => {
           ) : null}
         </div>
       </div>
-      <button className="btn rounded-lg btn-lg mt-5" onClick={downloadImage}>
+      <button className="btn rounded-lg btn-lg m-5" onClick={downloadImage}>
         Download{" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
