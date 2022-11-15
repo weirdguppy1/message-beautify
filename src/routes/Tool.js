@@ -36,7 +36,7 @@ const Tool = () => {
 
   return (
     <div className="flex flex-col justify-center min-h-screen items-center">
-      <div className="flex flex-col ">
+      <div className="flex flex-col mb-5">
         <h1 className="text-6xl font-bold mt-2">Beautify it.</h1>
         <div className="w-full max-w-xs">
           <label className="label">
@@ -105,7 +105,7 @@ const Tool = () => {
       </div>
       <div
         id="image"
-        className={`mt-5 w-[50rem] h-[30rem] border-2 ${font}`}
+        className={`w-[50rem] h-[30rem] border-2 border-black ${font}`}
         style={{
           backgroundColor: !openGradient ? color : null,
           background: openGradient
